@@ -1,23 +1,20 @@
 package tests;
 
-import java.awt.AWTException;
 
-import org.openqa.selenium.By;
-import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 
 import libraryUtils.BaseTest;
 import libraryUtils.Utility;
-import pages.SignInPage;
+import pages.FlightsPage;
 
 public class SignInTest1 extends BaseTest {
 
 	
 	@Test
-	public void shouldThrowAnErrorIfSignInDetailsAreMissing() throws AWTException, InterruptedException {
+	public void shouldThrowAnErrorIfSignInDetailsAreMissing() throws Exception {
 		
-	SignInPage s = new SignInPage(driver);
+	FlightsPage s = new FlightsPage(driver);
 	
 	Reporter.log("Step: 1 Verify the title of login page", 1);
 	Utility.verifyTitle("Site for Booking Flights, Hotels, Packages, Trains & Local activities.");
@@ -33,8 +30,12 @@ public class SignInTest1 extends BaseTest {
 	
 	Reporter.log("Step: 5 switch to the new frame and click the button", 1);
 	
-	s.switchToSignInFrame();
-
-	s.clickSignInButton();
+	s.switchToSignInFrameAndClickButton();
+	
+	Reporter.log("Step: 6: Verify the errors", 1);
+	s.getErrorText();
+	
+	
+	
 }
 }

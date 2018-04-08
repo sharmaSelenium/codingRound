@@ -1,17 +1,28 @@
 package libraryUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
+
+import com.sun.jna.platform.FileUtils;
 
 /**
  *  This class will have static common methods like Taking screenshots, page explicit waits,
@@ -35,7 +46,12 @@ public class Utility {
 		this.driver=driver;
 
 	}
-	public static void takeScreenshot() {
+	public static void takeScreenshot(WebDriver driver, String photos) {
+		TakesScreenshot ts=(TakesScreenshot)driver;
+		File src= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		
+	
+		
 
 	}
 
@@ -71,6 +87,22 @@ public class Utility {
 		}
 	}
 
+	/**
+	 * wait for the frame 
+	 * */
+
+	public static void waitForTheFrame(WebElement ele) {
+		try{WebDriverWait wait = new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(ele));
+		Reporter.log("Frame found"+ele, 1);
+		}
+		catch(Exception e) {
+
+			Reporter.log("Frame not found", 1);
+			Assert.fail();
+		}
+	}
+	
 	/**
 	 * verify the element visiblity
 	 * */
@@ -159,9 +191,11 @@ public class Utility {
            List<WebElement> frames = driver.findElements(By.xpath("//iframe"));
            System.out.println("Total Frames : " + frames.size());
 
+          
            for(WebElement frame : frames)
            {
-           driver.switchTo().frame(frame);
+        	   
+        	  driver.switchTo().frame(frame);
            
            try {
 
@@ -177,21 +211,45 @@ public class Utility {
            driver.switchTo().defaultContent();
            }
 
-           
- 
-}
-	public  static void switchToframes1(WebElement ele) {
-	
-		List<WebElement> frames = driver.findElements(By.xpath("//iframe"));
-		if(frames.size()>1) {
+	   }
+	   
+	   /**
+	    * 
+	    * Get the value of Keys according to path set in configuration file config.properties
+	    * */
+         public static String getPropertyValue(String path, String key) throws Exception {
 			
-			driver.switchTo().frame(ele);
-		}
-		else {
-			System.out.println("frame not found");
-		}
-	
-		driver.switchTo().defaultContent();
-	}			
+        	 String v="";
+        	 
+        	 Properties p = new Properties();
+        	 p.load(new FileInputStream(path));
+        	 v=p.getProperty(key);
+        	 return v;
+           
+         
+}
 
+         /**
+  	    * Select the value by visible text
+  	    * */
+         public static boolean selectDropDrownValue(WebElement element, String value)
+         {
+                try {
+
+                      if (element != null) {
+                             Select selectBox = new Select(element);
+                             selectBox.selectByVisibleText(value);
+                      }
+                } catch (NoSuchElementException e) {
+                      e.printStackTrace();
+                      return false;
+                } catch (Exception e) {
+                      e.printStackTrace();
+                      return false;
+                }
+                return true;
+
+         }
+         
+         
 }

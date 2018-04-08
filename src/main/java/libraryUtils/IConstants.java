@@ -14,5 +14,6 @@ public interface IConstants {
 	String CHROME_KEY_MAC_VALUE="";
 	
 	String PHOTO_PATH="./photos";
+	String CONFIG_PATH="./config.properties";
 	
 }

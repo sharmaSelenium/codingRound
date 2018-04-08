@@ -45,7 +45,7 @@ public abstract class BaseTest implements IConstants {
 	//clear the cookies
 	//open the URL
 	@BeforeMethod(alwaysRun=true)
-	public void openApp() {
+	public void openApp() throws Exception {
 		driver=new ChromeDriver();
 		//implicit wait
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -57,7 +57,8 @@ public abstract class BaseTest implements IConstants {
 		driver.manage().window().maximize();
 		
 		//get the URL
-		driver.get("https://www.cleartrip.com/"); 
+		String url=Utility.getPropertyValue(CONFIG_PATH, "URL");
+		driver.get(url); 
 		
 	}
 	
